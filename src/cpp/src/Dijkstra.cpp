@@ -53,10 +53,22 @@ Dijkstra::shortestPath(
 
         pq.pop();
 
+        if (currentDistance > distance[currentNode])
+        {
+            continue;
+        }
+
         // Visit neighbours
         for (const Edge& edge : adjacencyList.at(currentNode))
         {
-            double newDistance = currentDistance + edge.length;
+            if (edge.blocked)
+                continue;
+
+            double edgeCost =
+                edge.length * edge.trafficMultiplier;
+
+            double newDistance =
+                currentDistance + edgeCost;
 
             // Better path found
             if (newDistance < distance[edge.destination])

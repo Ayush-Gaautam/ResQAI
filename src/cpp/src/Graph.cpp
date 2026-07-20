@@ -244,6 +244,15 @@ Graph::getGraph() const
 {
     return adjacencyList;
 }
+// ===========================
+// Get Mutable Graph
+// ===========================
+
+std::unordered_map<long long, std::vector<Edge>>&
+Graph::getGraphMutable()
+{
+    return adjacencyList;
+}
 
 // ===========================
 // Get Hospitals

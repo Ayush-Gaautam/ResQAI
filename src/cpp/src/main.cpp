@@ -2,6 +2,8 @@
 #include "../include/Dijkstra.h"
 #include "../include/AStar.h"
 #include "../include/Benchmark.h"
+#include "../include/Traffic.h"
+#include "../include/Ambulance.h"
 #include <iostream>
 #include <unordered_map>
 #include <vector>
@@ -20,6 +22,17 @@ int main()
     graph.loadNodes("data/processed/nodes.csv");
     graph.loadGraph("data/processed/edges.csv");
     graph.loadHospitals("data/processed/hospitals.csv");
+    Traffic traffic;
+
+    traffic.loadTraffic(
+        graph,
+        "data/traffic.csv"
+    );
+    Ambulance ambulance;
+
+    ambulance.loadAmbulances(
+        "data/processed/ambulances.csv"
+    );
 
     graph.printGraphInfo();
 
@@ -32,7 +45,30 @@ int main()
     std::unordered_map<long long, long long> parent;
 
     // Source Node
-    long long source = 813348627;
+    // Emergency Node
+    long long source;
+
+    std::cout << "\nEnter Emergency Node ID: ";
+    std::cin >> source;
+
+    AmbulanceInfo nearestAmbulance =
+    ambulance.findNearestAvailableAmbulance(
+        graph,
+        source
+    );
+
+    std::cout << "\n========== NEAREST AMBULANCE ==========\n";
+    std::cout << "Ambulance ID : "
+          << nearestAmbulance.ambulanceId
+          << std::endl;
+
+    std::cout << "Node ID      : "
+          << nearestAmbulance.nodeId
+          << std::endl;
+
+    std::cout << "Status       : "
+          << nearestAmbulance.status
+          << std::endl;
 
     // Run Dijkstra
     auto distance = dijkstra.shortestPath(source, parent);

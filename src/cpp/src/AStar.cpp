@@ -104,6 +104,11 @@ AStar::shortestPath(
         double currentF = currentState.first;
         long long current = currentState.second;
 
+        if (currentF > fScore[current])
+        {
+            continue;
+        }
+
         // Destination reached
         if (current == destination)
             break;
@@ -132,9 +137,10 @@ AStar::shortestPath(
 
                 gScore[edge.destination] = tentativeGScore;
 
-                fScore[edge.destination] =
+                /*fScore[edge.destination] =
                     tentativeGScore +
-                    heuristic(edge.destination, destination);
+                    heuristic(edge.destination, destination);*/
+                fScore[edge.destination] = tentativeGScore;
 
                 openSet.push(
                 {

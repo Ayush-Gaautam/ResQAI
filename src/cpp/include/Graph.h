@@ -8,8 +8,6 @@
 // ===========================
 // Road Node
 // ===========================
-
-
 struct Node
 {
     long long id;
@@ -25,7 +23,7 @@ struct Edge
     long long destination;
     double length;
 
-    // Future Traffic Simulation
+    // Traffic Information
     bool blocked = false;
     double trafficMultiplier = 1.0;
 };
@@ -65,7 +63,6 @@ public:
     // ===========================
 
     // Load nodes.csv
-    const Node& getNode(long long id) const;
     void loadNodes(const std::string& filename);
 
     // Load edges.csv
@@ -84,15 +81,24 @@ public:
     // Getters
     // ===========================
 
-    // Return all nodes
-    const std::unordered_map<long long, Node>& getNodes() const;
+    // Get single node
+    const Node& getNode(long long id) const;
 
-    // Return graph
-    const std::unordered_map<long long, std::vector<Edge>>& getGraph() const;
+    // Get all nodes
+    const std::unordered_map<long long, Node>&
+    getNodes() const;
 
-    // Return hospitals
-    const std::vector<Hospital>& getHospitals() const;
+    // Read-only graph
+    const std::unordered_map<long long, std::vector<Edge>>&
+    getGraph() const;
 
+    // Mutable graph (used by Traffic module)
+    std::unordered_map<long long, std::vector<Edge>>&
+    getGraphMutable();
+
+    // Hospital list
+    const std::vector<Hospital>&
+    getHospitals() const;
 };
 
 #endif
