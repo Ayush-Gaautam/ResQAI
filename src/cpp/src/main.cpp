@@ -40,6 +40,7 @@ int main()
     // Create Dijkstra Object
     // =====================================
     Dijkstra dijkstra(graph);
+    AStar astar(graph);
 
     // Parent Table
     std::unordered_map<long long, long long> parent;
@@ -56,6 +57,16 @@ int main()
         graph,
         source
     );
+    if (nearestAmbulance.nodeId == -1)
+    {
+        std::cout << "No available ambulance found.\n";
+        return 0;
+    }
+
+// Continue normally
+    std::cout << "Nearest Ambulance: "
+          << nearestAmbulance.ambulanceId
+          << std::endl;
 
     std::cout << "\n========== NEAREST AMBULANCE ==========\n";
     std::cout << "Ambulance ID : "
@@ -69,6 +80,25 @@ int main()
     std::cout << "Status       : "
           << nearestAmbulance.status
           << std::endl;
+
+    // =====================================
+    // Ambulance -> Patient Route
+    // =====================================
+
+    std::unordered_map<long long, long long> ambulanceParent;
+
+    
+    astar.shortestPath(
+        nearestAmbulance.nodeId,
+        source,
+        ambulanceParent
+    );
+
+    auto ambulancePath =
+        astar.reconstructPath(
+            source,
+            ambulanceParent
+        );
 
     // Run Dijkstra
     auto distance = dijkstra.shortestPath(source, parent);
@@ -106,7 +136,11 @@ int main()
     // =====================================
     // Reconstruct Path
     // =====================================
-    auto path = dijkstra.reconstructPath(nearestHospital.nodeId, parent);
+    auto patientHospitalPath =
+    dijkstra.reconstructPath(
+        nearestHospital.nodeId,
+        parent
+    );
 
     // =====================================
     // Print Results
@@ -132,40 +166,75 @@ int main()
     std::cout << "-----------------------------------------\n";
 
 
-    for (size_t i = 0; i < path.size(); i++)
+    for(size_t i=0;i<patientHospitalPath.size();i++)
     {
-        std::cout << path[i];
+        std::cout << patientHospitalPath[i];
 
-        if (i != path.size() - 1)
+        if (i != patientHospitalPath.size() - 1)
             std::cout << " -> ";
     }
 
     std::cout << std::endl;
 
     // =====================================
-    // Save Path to CSV
+    // Save Routes to CSV
     // =====================================
-    std::ofstream outFile("outputs/path.csv");
+// =====================================
+// Save Ambulance -> Patient Route
+// =====================================
 
-    if (!outFile.is_open())
+    std::ofstream ambulanceFile(
+        "outputs/ambulance_to_patient.csv"
+    );
+
+    ambulanceFile << "nodeId,latitude,longitude\n";
+
+    for(long long nodeId : ambulancePath)
     {
-        std::cout << "\nError creating outputs/path.csv\n";
-        return 1;
+        const Node& node = graph.getNode(nodeId);
+
+        ambulanceFile
+            << node.id << ","
+            << node.latitude << ","
+            << node.longitude << "\n";
     }
 
-    outFile << "nodeId\n";
-
-    for (long long node : path)
+    ambulanceFile.close();
+    if(!ambulanceFile)
     {
-        outFile << node << "\n";
+        std::cout << "Error writing ambulance route.\n";
+    }
+    // =====================================
+// Save Patient -> Hospital Route
+// =====================================
+
+    std::ofstream hospitalFile(
+        "outputs/patient_to_hospital.csv"
+    );
+
+    hospitalFile << "nodeId,latitude,longitude\n";
+
+    for(long long nodeId : patientHospitalPath)
+    {
+        const Node& node = graph.getNode(nodeId);
+
+        hospitalFile
+            << node.id << ","
+            << node.latitude << ","
+            << node.longitude << "\n";
     }
 
-    outFile.close();
+    hospitalFile.close();
+    if(!hospitalFile)
+    {
+        std::cout << "Error writing hospital route.\n";
+    }
 
-    std::cout << "\nPath saved successfully to outputs/path.csv\n";
+    std::cout << "\nAmbulance route saved to outputs/ambulance_to_patient.csv\n";
+    std::cout << "\nHospital route saved to outputs/patient_to_hospital.csv\n";
     // ====================================
-// Benchmark
-// ====================================
+    // Benchmark
+    // ====================================
 
     Benchmark benchmark(graph);
 

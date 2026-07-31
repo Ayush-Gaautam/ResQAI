@@ -98,11 +98,11 @@ AStar::shortestPath(
 
     while (!openSet.empty())
     {
-        State currentState = openSet.top();
+        const State currentState = openSet.top();
         openSet.pop();
 
-        double currentF = currentState.first;
-        long long current = currentState.second;
+        const double currentF = currentState.first;
+        const long long current = currentState.second;
 
         if (currentF > fScore[current])
         {
@@ -137,11 +137,10 @@ AStar::shortestPath(
 
                 gScore[edge.destination] = tentativeGScore;
 
-                /*fScore[edge.destination] =
+                fScore[edge.destination] =
                     tentativeGScore +
-                    heuristic(edge.destination, destination);*/
-                fScore[edge.destination] = tentativeGScore;
-
+                    heuristic(edge.destination, destination);
+                
                 openSet.push(
                 {
                     fScore[edge.destination],

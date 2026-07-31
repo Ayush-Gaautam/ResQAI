@@ -41,7 +41,14 @@ void Ambulance::loadAmbulances(
 
         std::getline(ss, node, ',');
 
-        ambulance.nodeId = std::stoll(node);
+        try
+        {
+            ambulance.nodeId = std::stoll(node);
+        }
+        catch(...)
+        {
+            continue;
+        }
 
         std::getline(ss, ambulance.status);
 
@@ -93,6 +100,10 @@ AmbulanceInfo Ambulance::findNearestAvailableAmbulance(
     double minimumDistance = 1e18;
 
     AmbulanceInfo nearestAmbulance;
+
+    nearestAmbulance.ambulanceId = "NONE";
+    nearestAmbulance.nodeId = -1;
+    nearestAmbulance.status = "Unavailable";
 
     std::unordered_map<long long, long long> parent;
 

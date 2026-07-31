@@ -1,5 +1,5 @@
 #include "../include/Graph.h"
-
+#include <stdexcept>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -224,7 +224,16 @@ void Graph::printGraphInfo() const
 // ===========================
 const Node& Graph::getNode(long long id) const
 {
-    return nodes.at(id);
+    auto it = nodes.find(id);
+
+    if (it == nodes.end())
+    {
+        throw std::runtime_error(
+            "Node not found: " + std::to_string(id)
+        );
+    }
+
+    return it->second;
 }
 
 // ===========================

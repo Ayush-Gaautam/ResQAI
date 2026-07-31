@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ResQAI - Emergency Response Dashboard</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ========================= -->
+    <!-- Header -->
+    <!-- ========================= -->
+
+    <header>
+
+        <div class="logo">
+            🚑 ResQAI
+        </div>
+
+        <div class="title">
+            Smart Emergency Response System
+        </div>
+
+    </header>
+
+    <!-- ========================= -->
+    <!-- Main Container -->
+    <!-- ========================= -->
+
+    <div class="container">
+
+        <!-- ========================= -->
+        <!-- Sidebar -->
+        <!-- ========================= -->
+
+        <aside class="sidebar">
+
+            <h2>Emergency Information</h2>
+
+            <div class="card">
+
+                <p><strong>Emergency Node</strong></p>
+                <span id="emergencyNode">Loading...</span>
+
+            </div>
+
+            <div class="card">
+
+                <p><strong>Ambulance ID</strong></p>
+                <span id="ambulanceId">Loading...</span>
+
+            </div>
+
+            <div class="card">
+
+                <p><strong>Nearest Hospital</strong></p>
+                <span id="hospitalName">Loading...</span>
+
+            </div>
+
+            <div class="card">
+
+                <p><strong>Distance</strong></p>
+                <span id="distance">Loading...</span>
+
+            </div>
+
+            <div class="card">
+
+                <p><strong>Estimated Time</strong></p>
+                <span id="eta">Loading...</span>
+
+            </div>
+
+            <div class="card">
+
+                <p><strong>Algorithm</strong></p>
+                <span>Dijkstra + A*</span>
+
+            </div>
+
+            <div class="card">
+
+                <p><strong>Traffic Status</strong></p>
+                <span id="trafficStatus">Normal</span>
+
+            </div>
+
+        </aside>
+
+        <!-- ========================= -->
+        <!-- Map Section -->
+        <!-- ========================= -->
+
+        <section class="map-section">
+
+            <div id="map"></div>
+
+            <!-- ========================= -->
+            <!-- Legend -->
+            <!-- ========================= -->
+
+            <div class="legend">
+
+                <h3>Legend</h3>
+
+                <div class="legend-item">
+                    <span class="green-box"></span>
+                    Ambulance → Patient
+                </div>
+
+                <div class="legend-item">
+                    <span class="blue-box"></span>
+                    Patient → Hospital
+                </div>
+
+                <div class="legend-item">
+                    🚑 Ambulance
+                </div>
+
+                <div class="legend-item">
+                    🚨 Emergency
+                </div>
+
+                <div class="legend-item">
+                    🏥 Hospital
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- Footer -->
+    <!-- ========================= -->
+
+    <footer>
+
+        Developed using C++, Dijkstra, A*, Leaflet & OpenStreetMap
+
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Map -->
+    <script src="map.js"></script>
+
+    <!-- Logic -->
+    <script src="script.js"></script>
+
+</body>
+
+</html>
+<h3>Select Emergency</h3>
+
+<input
+id="latitude"
+placeholder="Latitude"
+readonly>
+
+<input
+id="longitude"
+placeholder="Longitude"
+readonly>
+
+<button onclick="alert('Run ResQAI.exe')">
+
+Generate Route
+
+</button>
+<div class="card">
+    <h3>Selected Location</h3>
+
+    <label>Latitude</label><br>
+    <input
+        type="text"
+        id="latitude"
+        readonly
+        style="width:90%; padding:8px; margin-bottom:10px;">
+
+    <label>Longitude</label><br>
+    <input
+        type="text"
+        id="longitude"
+        readonly
+        style="width:90%; padding:8px;">
+</div>
+
+<div class="card">
+    <button id="generateRouteBtn">
+        Generate Route
+    </button>
+</div>
