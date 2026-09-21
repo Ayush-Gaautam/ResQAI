@@ -64,7 +64,9 @@ for _, row in hospitals.iterrows():
 
     hospital_nodes.append({
         "nodeId": nearest_node,
-        "name": name
+        "name": name,
+        "latitude": latitude,
+        "longitude": longitude
     })
 
 # -----------------------------

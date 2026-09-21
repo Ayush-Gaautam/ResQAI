@@ -230,6 +230,19 @@ int main()
         std::cout << "Error writing hospital route.\n";
     }
 
+    std::ofstream hospitalMetadataFile(
+        "outputs/hospital.json"
+    );
+
+    hospitalMetadataFile
+        << "{\"nodeId\":" << nearestHospital.nodeId
+        << ",\"name\":\"" << nearestHospital.name
+        << "\",\"latitude\":" << nearestHospital.latitude
+        << ",\"longitude\":" << nearestHospital.longitude
+        << "}\n";
+
+    hospitalMetadataFile.close();
+
     std::cout << "\nAmbulance route saved to outputs/ambulance_to_patient.csv\n";
     std::cout << "\nHospital route saved to outputs/patient_to_hospital.csv\n";
     // ====================================

@@ -1,59 +1,59 @@
-nodeId,name
-10211964971,PGI Emergency
-1428312447,"KD Cosmetic Surgery Centre,Sector 34-A"
-1431998385,PGI Chandigarh
-2457404684,Dispesary
-1428412304,Santokh Hospital
-1431135604,Dharam Hospital
-1428431965,Bharat Vikas Parishad Charitable Medical Centre
-1428280178,Land Mark Hospital(Langol View Charitable Clinic and Maternity Home)
-10236604795,Advance Eye Center
-9184582823,Government Pet Hospital
-11853801364,Rameshwara Hospital
-1429418157,Oxford Heart and Multispeciality Hospital
-7825390352,Mukat Hospital and Heart Institute
-1428312416,Nins Brain and Spine Hospital
-5522019997,Ashwini Maternity Hospital
-1428312445,Inscol Tertiary Care Hospital
-1442785578,Deep Hospital
-4836751021,Civil Hospital-Sector 22
-3842295780,Chaitanya Hospital
-1430574897,Grewal Eye Institute
-3943307780,"Civil hospital, Manimajra"
-1428390883,Abhilasha Hospital
-1435305653,Arya Hospital
-10094756130,Dabur Dhanwantry Hospital
-1429261366,Arthoscopy and Spinal Endoscopy Centre
-1428312252,Virdi Eye Hospital(Virk Hospital)
-3912639780,Mangnum Hospital
-1428391028,Grover Eye Laser and E.N.T Hospital
-1428280418,Bedi Hospital
-10096985288,Postgraduate Institute of Medical Education and Research (PGIMER)
-10566973628,Neeraj Eye Hospital
-1428119599,Kapoor's Kidney and Urostone Centre Pvt.Ltd.
-1428312416,Omni Hospital
-1435290544,Tricity Hospital Pvt. Ltd.
-10100966860,Happy Family Maternitys Children Hospital Pvt Ltd
-1426551992,"Kaushal Hospital, Chandigarh"
-6329991940,Police Hospital
-1428213087,ESIC Hospital Ramdarbar
-3942900071,Composite Hospital I.T.B.P
-11846410941,Cloudnine Hospital
-10088353806,Babe Ke Hospital And IMT
-1426202033,Nirmal Dr. Bhasin Jannee Fertility Centre
-1429078117,Dr. Ashok Sharma's Cornea Centre
-1428255138,Dr. Chandan Trikha Homeopathic Hospital
-1429078247,Unknown Hospital
-1428390775,Pandhi Hospital
-4832627023,Dr. Priyanka Sharma Gynaecologist
-11702742431,Chd City Hospital
-1428390733,Guru Nanak Multispeciality Hospital
-3826576021,Kaushal Clinic & Clinical Lab
-1431220766,Fortis Medcentre Hospital
-10538439767,Chhuttani Medical Centre - Psychiatrist & De-addiction Centre
-1429141759,ARV Othopaedic Hospital
-10243999641,Eden Hospital
-1430552764,Mamta Child Health Care Centre
-1428280286,Sarhind Orthopaedic Multispeciality Medical Centre
-1428213459,Air Force Hospital
-1428213554,Mental Health Institute
+nodeId,name,latitude,longitude
+10211964971,PGI Emergency,30.7611013,76.7762212
+1428312447,"KD Cosmetic Surgery Centre,Sector 34-A",30.7245237,76.7689883
+1431998385,PGI Chandigarh,30.7614305,76.7749653
+2457404684,Dispesary,30.6775899,76.798432
+1428412304,Santokh Hospital,30.7478631,76.7489881
+1431135604,Dharam Hospital,30.7491743,76.7740258
+1428431965,Bharat Vikas Parishad Charitable Medical Centre,30.747535,76.765978
+1428280178,Land Mark Hospital(Langol View Charitable Clinic and Maternity Home),30.7122719,76.7702748
+10236604795,Advance Eye Center,30.7639495,76.7800519
+9184582823,Government Pet Hospital,30.7329698,76.7714736
+11853801364,Rameshwara Hospital,30.7583074,76.7843183
+1429418157,Oxford Heart and Multispeciality Hospital,30.7287476,76.7898551
+7825390352,Mukat Hospital and Heart Institute,30.7228358,76.7703393
+1428312416,Nins Brain and Spine Hospital,30.7218259,76.7669463
+5522019997,Ashwini Maternity Hospital,30.719376,76.7578912
+1428312445,Inscol Tertiary Care Hospital,30.723938,76.7656857
+1442785578,Deep Hospital,30.7635999,76.7483211
+4836751021,Civil Hospital-Sector 22,30.7324319,76.7716616
+3842295780,Chaitanya Hospital,30.7107483,76.7541911
+1430574897,Grewal Eye Institute,30.7420224,76.7909159
+3943307780,"Civil hospital, Manimajra",30.7128525,76.8424183
+1428390883,Abhilasha Hospital,30.7279522,76.7594992
+1435305653,Arya Hospital,30.7174644,76.832989
+10094756130,Dabur Dhanwantry Hospital,30.6999404,76.7671408
+1429261366,Arthoscopy and Spinal Endoscopy Centre,30.716308,76.7777958
+1428312252,Virdi Eye Hospital(Virk Hospital),30.7198176,76.7686281
+3912639780,Mangnum Hospital,30.7237708,76.7604969
+1428391028,Grover Eye Laser and E.N.T Hospital,30.7301782,76.7603199
+1428280418,Bedi Hospital,30.7176996,76.7693818
+10096985288,Postgraduate Institute of Medical Education and Research (PGIMER),30.7643681,76.7762778
+10566973628,Neeraj Eye Hospital,30.734221,76.7525804
+1428119599,Kapoor's Kidney and Urostone Centre Pvt.Ltd.,30.7029628,76.7620003
+1428312416,Omni Hospital,30.7216968,76.7669718
+1435290544,Tricity Hospital Pvt. Ltd.,30.7104462,76.8429682
+10100966860,Happy Family Maternitys Children Hospital Pvt Ltd,30.7158261,76.8389341
+1426551992,"Kaushal Hospital, Chandigarh",30.722908,76.7447786
+6329991940,Police Hospital,30.7232383,76.8122966
+1428213087,ESIC Hospital Ramdarbar,30.696743,76.787964
+3942900071,Composite Hospital I.T.B.P,30.677988,76.807281
+11846410941,Cloudnine Hospital,30.7001359,76.7875764
+10088353806,Babe Ke Hospital And IMT,30.724507,76.732464
+1426202033,Nirmal Dr. Bhasin Jannee Fertility Centre,30.7421389,76.7356685
+1429078117,Dr. Ashok Sharma's Cornea Centre,30.7276054,76.7694571
+1428255138,Dr. Chandan Trikha Homeopathic Hospital,30.7127888,76.7774089
+1429078247,Unknown Hospital,30.7314168,76.7725
+1428390775,Pandhi Hospital,30.7266382,76.752325
+4832627023,Dr. Priyanka Sharma Gynaecologist,30.735249,76.800628
+11702742431,Chd City Hospital,30.7417091,76.7942557
+1428390733,Guru Nanak Multispeciality Hospital,30.7255395,76.7622902
+3826576021,Kaushal Clinic & Clinical Lab,30.7525838,76.7173534
+1431220766,Fortis Medcentre Hospital,30.7606212,76.7820366
+10538439767,Chhuttani Medical Centre - Psychiatrist & De-addiction Centre,30.740194,76.782629
+1429141759,ARV Othopaedic Hospital,30.7264061,76.7732467
+10243999641,Eden Hospital,30.7091481,76.8027108
+1430552764,Mamta Child Health Care Centre,30.7313883,76.7849987
+1428280286,Sarhind Orthopaedic Multispeciality Medical Centre,30.7134331,76.7687413
+1428213459,Air Force Hospital,30.7033952,76.7775151
+1428213554,Mental Health Institute,30.7042318,76.7751977

@@ -164,9 +164,34 @@ void Graph::loadHospitals(const std::string& filename)
 
         std::string nodeId;
         std::string name;
+        std::string latitude;
+        std::string longitude;
 
         std::getline(ss, nodeId, ',');
-        std::getline(ss, name);
+
+        std::string remaining;
+        std::getline(ss, remaining);
+
+        const size_t longitudeSeparator = remaining.rfind(',');
+        const size_t latitudeSeparator = remaining.rfind(',', longitudeSeparator - 1);
+
+        if (longitudeSeparator == std::string::npos ||
+            latitudeSeparator == std::string::npos)
+        {
+            continue;
+        }
+
+        name = remaining.substr(0, latitudeSeparator);
+        latitude = remaining.substr(
+            latitudeSeparator + 1,
+            longitudeSeparator - latitudeSeparator - 1
+        );
+        longitude = remaining.substr(longitudeSeparator + 1);
+
+        if (name.size() >= 2 && name.front() == '"' && name.back() == '"')
+        {
+            name = name.substr(1, name.size() - 2);
+        }
 
         try
         {
@@ -174,6 +199,8 @@ void Graph::loadHospitals(const std::string& filename)
 
             hospital.nodeId = std::stoll(nodeId);
             hospital.name = name;
+            hospital.latitude = std::stod(latitude);
+            hospital.longitude = std::stod(longitude);
 
             hospitals.push_back(hospital);
         }

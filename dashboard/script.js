@@ -6,10 +6,12 @@
 // CSV File Paths
 const ambulanceCSV = "../outputs/ambulance_to_patient.csv";
 const hospitalCSV = "../outputs/patient_to_hospital.csv";
+const hospitalMetadataFile = "../outputs/hospital.json";
 
 // Route Data
 let ambulanceRoutePoints = [];
 let hospitalRoutePoints = [];
+let hospitalMetadata = null;
 
 // ============================================
 // Load Dashboard
@@ -50,6 +52,14 @@ async function loadRoutes() {
         const hospitalText = await hospitalResponse.text();
 
         hospitalRoutePoints = parseCSV(hospitalText);
+
+        const hospitalMetadataResponse = await fetch(hospitalMetadataFile);
+
+        if (!hospitalMetadataResponse.ok) {
+            throw new Error("Cannot load hospital.json");
+        }
+
+        hospitalMetadata = await hospitalMetadataResponse.json();
 
         console.log("Ambulance Route:", ambulanceRoutePoints);
 
@@ -168,7 +178,7 @@ function updateDashboard() {
 
     // Hospital Name
     document.getElementById("hospitalName").innerHTML =
-        "PGI Chandigarh";
+        hospitalMetadata ? hospitalMetadata.name : "Unknown hospital";
 
     // Distance
     let distance = calculateDistance();
@@ -356,16 +366,18 @@ function replaceMarkers(){
     );
 
 
+    const hospitalPosition = hospitalMetadata ?
+        [hospitalMetadata.latitude, hospitalMetadata.longitude] :
+        hospitalRoutePoints[hospitalRoutePoints.length - 1];
+
     hospitalMarker = L.marker(
-        hospitalRoutePoints[
-            hospitalRoutePoints.length-1
-        ],
+        hospitalPosition,
         {icon:hospitalIcon}
     )
     .addTo(map)
     .bindPopup(
         "<b>🏥 Hospital</b><br>" +
-        "PGI Chandigarh"
+        hospitalMetadata ? hospitalMetadata.name : "Unknown hospital"
     );
 
 }

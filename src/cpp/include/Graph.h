@@ -35,6 +35,8 @@ struct Hospital
 {
     long long nodeId;
     std::string name;
+    double latitude;
+    double longitude;
 };
 
 // ===========================
