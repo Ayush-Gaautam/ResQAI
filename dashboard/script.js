@@ -1,453 +1,65 @@
-// ============================================
-// ResQAI Dashboard
-// script.js (Part 1)
-// ============================================
+const apiBaseUrl = (window.RESQAI_API_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
+let selectedLocation = null;
 
-// CSV File Paths
-const ambulanceCSV = "../outputs/ambulance_to_patient.csv";
-const hospitalCSV = "../outputs/patient_to_hospital.csv";
-const hospitalMetadataFile = "../outputs/hospital.json";
+function setText(id, value) {
+    document.getElementById(id).textContent = value;
+}
 
-// Route Data
-let ambulanceRoutePoints = [];
-let hospitalRoutePoints = [];
-let hospitalMetadata = null;
+function updateDashboard(result) {
+    setText("emergencyNode", result.emergency_node_id);
+    setText("ambulanceId", result.ambulance_id);
+    setText("hospitalName", result.hospital.name);
+    setText("distance", `${result.total_distance_meters.toFixed(2)} m`);
+    setText("eta", `${result.eta_minutes.toFixed(1)} min`);
+    setText("trafficStatus", result.traffic_status);
+}
 
-// ============================================
-// Load Dashboard
-// ============================================
+async function requestRoute(payload) {
+    const response = await fetch(`${apiBaseUrl}/route`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+    if (!response.ok) {
+        let detail = "Unable to generate route.";
+        try {
+            detail = (await response.json()).detail || detail;
+        } catch (_) {
+            // Keep the user-facing fallback when the server does not return JSON.
+        }
+        throw new Error(detail);
+    }
+    return response.json();
+}
 
-document.addEventListener("DOMContentLoaded", () => {
-
-    loadRoutes();
-
-});
-
-// ============================================
-// Load Both CSV Files
-// ============================================
-
-async function loadRoutes() {
-
+async function generateRoute() {
+    const button = document.getElementById("generateRouteBtn");
+    button.disabled = true;
+    button.textContent = "Calculating...";
     try {
-
-        // Read Ambulance Route
-        const ambulanceResponse = await fetch(ambulanceCSV);
-
-        if (!ambulanceResponse.ok) {
-            throw new Error("Cannot load ambulance_to_patient.csv");
-        }
-
-        const ambulanceText = await ambulanceResponse.text();
-
-        ambulanceRoutePoints = parseCSV(ambulanceText);
-
-        // Read Hospital Route
-        const hospitalResponse = await fetch(hospitalCSV);
-
-        if (!hospitalResponse.ok) {
-            throw new Error("Cannot load patient_to_hospital.csv");
-        }
-
-        const hospitalText = await hospitalResponse.text();
-
-        hospitalRoutePoints = parseCSV(hospitalText);
-
-        const hospitalMetadataResponse = await fetch(hospitalMetadataFile);
-
-        if (!hospitalMetadataResponse.ok) {
-            throw new Error("Cannot load hospital.json");
-        }
-
-        hospitalMetadata = await hospitalMetadataResponse.json();
-
-        console.log("Ambulance Route:", ambulanceRoutePoints);
-
-        console.log("Hospital Route:", hospitalRoutePoints);
-
-        // Draw Everything
-        displayRoutes();
-
-    }
-
-    catch (error) {
-
+        const payload = selectedLocation
+            ? { latitude: selectedLocation.lat, longitude: selectedLocation.lng }
+            : { node_id: 813348627 };
+        const result = await requestRoute(payload);
+        displayRoute(result);
+        updateDashboard(result);
+        setText("status", "Route ready. Click the map to choose another emergency.");
+    } catch (error) {
         console.error(error);
-
-        alert("Unable to load CSV files.");
-
+        setText("status", error.message);
+    } finally {
+        button.disabled = false;
+        button.textContent = "Generate Route";
     }
-
 }
 
-// ============================================
-// Convert CSV → Coordinates
-// ============================================
-
-function parseCSV(csvText) {
-
-    const lines = csvText.trim().split("\n");
-
-    const coordinates = [];
-
-    // Skip Header
-    for (let i = 1; i < lines.length; i++) {
-
-        const values = lines[i].split(",");
-
-        if (values.length < 3)
-            continue;
-
-        const latitude = parseFloat(values[1]);
-
-        const longitude = parseFloat(values[2]);
-
-        if (!isNaN(latitude) && !isNaN(longitude)) {
-
-            coordinates.push([latitude, longitude]);
-
-        }
-
-    }
-
-    return coordinates;
-
-}
-
-// ============================================
-// Display Everything
-// ============================================
-
-function displayRoutes() {
-
-    if (ambulanceRoutePoints.length === 0 ||
-        hospitalRoutePoints.length === 0) {
-
-        alert("No Route Found.");
-
-        return;
-
-    }
-
-    // Draw Ambulance Route
-    drawAmbulanceRoute(ambulanceRoutePoints);
-
-    // Draw Hospital Route
-    drawHospitalRoute(hospitalRoutePoints);
-
-    // Add Ambulance Marker
-    addAmbulanceMarker(
-        ambulanceRoutePoints[0]
-    );
-
-    // Emergency Marker
-    addEmergencyMarker(
-        ambulanceRoutePoints[
-            ambulanceRoutePoints.length - 1
-        ]
-    );
-
-    // Hospital Marker
-    addHospitalMarker(
-        hospitalRoutePoints[
-            hospitalRoutePoints.length - 1
-        ]
-    );
-
-    // Zoom Map
-    zoomToRoutes();
-    updateDashboard();
-    replaceMarkers();
-    highlightRoutes();
-
-}
-// ============================================
-// PART 2
-// Update Sidebar Information
-// ============================================
-
-function updateDashboard() {
-
-    // Emergency Node
-    document.getElementById("emergencyNode").innerHTML =
-        "813348627";
-
-    // Ambulance ID
-    document.getElementById("ambulanceId").innerHTML =
-        "AMB-001";
-
-    // Hospital Name
-    document.getElementById("hospitalName").innerHTML =
-        hospitalMetadata ? hospitalMetadata.name : "Unknown hospital";
-
-    // Distance
-    let distance = calculateDistance();
-
-    document.getElementById("distance").innerHTML =
-        distance.toFixed(2) + " m";
-
-    // ETA
-    let eta = calculateETA(distance);
-
-    document.getElementById("eta").innerHTML =
-        eta.toFixed(1) + " min";
-
-    // Traffic
-    document.getElementById("trafficStatus").innerHTML =
-        "Normal";
-}
-
-
-// ============================================
-// Distance Calculation
-// ============================================
-
-function calculateDistance() {
-
-    let total = 0;
-
-    for(let i=1;i<hospitalRoutePoints.length;i++){
-
-        const p1 = hospitalRoutePoints[i-1];
-        const p2 = hospitalRoutePoints[i];
-
-        total += haversineDistance(
-            p1[0],
-            p1[1],
-            p2[0],
-            p2[1]
-        );
-
-    }
-
-    return total;
-
-}
-
-
-// ============================================
-// Haversine Formula
-// ============================================
-
-function haversineDistance(lat1, lon1, lat2, lon2){
-
-    const R = 6371000;
-
-    const dLat =
-        (lat2-lat1) * Math.PI / 180;
-
-    const dLon =
-        (lon2-lon1) * Math.PI / 180;
-
-    const a =
-
-        Math.sin(dLat/2) *
-        Math.sin(dLat/2)
-
-        +
-
-        Math.cos(lat1*Math.PI/180)
-
-        *
-
-        Math.cos(lat2*Math.PI/180)
-
-        *
-
-        Math.sin(dLon/2)
-
-        *
-
-        Math.sin(dLon/2);
-
-    const c =
-
-        2 *
-
-        Math.atan2(
-            Math.sqrt(a),
-            Math.sqrt(1-a)
-        );
-
-    return R*c;
-
-}
-
-
-// ============================================
-// ETA
-// ============================================
-
-function calculateETA(distance){
-
-    // Assume 40 km/hr
-
-    const speed = 40000/60;
-
-    return distance/speed;
-
-}
-
-
-// ============================================
-// Call Dashboard Update
-// ============================================
-
-updateDashboard();
-
-// ============================================
-// PART 3
-// Professional Features
-// ============================================
-
-// Ambulance Icon
-const ambulanceIcon = L.icon({
-    iconUrl: "https://cdn-icons-png.flaticon.com/512/2967/2967350.png",
-    iconSize: [38,38],
-    iconAnchor: [19,38],
-    popupAnchor: [0,-30]
-});
-
-// Emergency Icon
-const emergencyIcon = L.icon({
-    iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
-    iconSize: [38,38],
-    iconAnchor: [19,38],
-    popupAnchor: [0,-30]
-});
-
-// Hospital Icon
-const hospitalIcon = L.icon({
-    iconUrl: "https://cdn-icons-png.flaticon.com/512/2966/2966488.png",
-    iconSize: [38,38],
-    iconAnchor: [19,38],
-    popupAnchor: [0,-30]
-});
-
-
-// ============================================
-// Replace Default Markers
-// ============================================
-
-function replaceMarkers(){
-
-    if(ambulanceMarker)
-        map.removeLayer(ambulanceMarker);
-
-    if(emergencyMarker)
-        map.removeLayer(emergencyMarker);
-
-    if(hospitalMarker)
-        map.removeLayer(hospitalMarker);
-
-
-    ambulanceMarker = L.marker(
-        ambulanceRoutePoints[0],
-        {icon:ambulanceIcon}
-    )
-    .addTo(map)
-    .bindPopup(
-        "<b>🚑 Ambulance</b><br>" +
-        "ID : AMB-001<br>" +
-        "Status : Available"
-    );
-
-
-    emergencyMarker = L.marker(
-        ambulanceRoutePoints[
-            ambulanceRoutePoints.length-1
-        ],
-        {icon:emergencyIcon}
-    )
-    .addTo(map)
-    .bindPopup(
-        "<b>🚨 Emergency</b><br>" +
-        "Node : 813348627"
-    );
-
-
-    const hospitalPosition = hospitalMetadata ?
-        [hospitalMetadata.latitude, hospitalMetadata.longitude] :
-        hospitalRoutePoints[hospitalRoutePoints.length - 1];
-
-    hospitalMarker = L.marker(
-        hospitalPosition,
-        {icon:hospitalIcon}
-    )
-    .addTo(map)
-    .bindPopup(
-        "<b>🏥 Hospital</b><br>" +
-        hospitalMetadata ? hospitalMetadata.name : "Unknown hospital"
-    );
-
-}
-
-
-// ============================================
-// Highlight Routes
-// ============================================
-
-function highlightRoutes(){
-
-    ambulanceRoute.setStyle({
-
-        color:"green",
-
-        weight:8,
-
-        opacity:1
-
+document.addEventListener("DOMContentLoaded", async () => {
+    initializeMap((latlng) => {
+        selectedLocation = latlng;
+        document.getElementById("latitude").value = latlng.lat.toFixed(6);
+        document.getElementById("longitude").value = latlng.lng.toFixed(6);
+        setText("status", "Location selected. Generate a route.");
     });
-
-    hospitalRoute.setStyle({
-
-        color:"blue",
-
-        weight:8,
-
-        opacity:1
-
-    });
-
-}
-
-
-// ============================================
-// Refresh Dashboard
-// ============================================
-
-function refreshDashboard(){
-
-    ambulanceRoutePoints=[];
-
-    hospitalRoutePoints=[];
-
-    loadRoutes();
-
-}
-
-
-// ============================================
-// Keyboard Shortcut
-// ============================================
-
-document.addEventListener("keydown",function(e){
-
-    if(e.key==="r" || e.key==="R"){
-
-        refreshDashboard();
-
-    }
-
+    document.getElementById("generateRouteBtn").addEventListener("click", generateRoute);
+    await generateRoute();
 });
-
-
-// ============================================
-// Finish
-// ============================================
-
-replaceMarkers();
-
-highlightRoutes();
-
-console.log("ResQAI Dashboard Loaded Successfully.");
