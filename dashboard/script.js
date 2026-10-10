@@ -1,4 +1,4 @@
-const apiBaseUrl = (window.RESQAI_API_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
+const apiBaseUrl = (window.RESQAI_API_URL || "/api").replace(/\/$/, "");
 let selectedLocation = null;
 
 function setText(id, value) {

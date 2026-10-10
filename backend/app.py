@@ -260,6 +260,10 @@ metrics_lock = threading.Lock()
 
 @app.middleware("http")
 async def request_observability(request: Request, call_next):
+    # Vercel service rewrites preserve the public /api prefix.
+    if request.scope["path"].startswith("/api/"):
+        request.scope["path"] = request.scope["path"][4:]
+        request.scope["raw_path"] = request.scope["raw_path"][4:]
     request_id = request.headers.get("X-Request-ID", str(uuid.uuid4()))
     started = time.perf_counter()
     with metrics_lock:
