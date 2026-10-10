@@ -1,48 +1,121 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>ResQAI - Emergency Response Dashboard</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <header>
         <div class="logo">ResQAI</div>
         <div class="title">Smart Emergency Response System</div>
     </header>
+
     <div class="container">
         <aside class="sidebar">
             <h2>Emergency Information</h2>
-            <div class="card"><p><strong>Emergency Node</strong></p><span id="emergencyNode">Loading...</span></div>
-            <div class="card"><p><strong>Ambulance ID</strong></p><span id="ambulanceId">Loading...</span></div>
-            <div class="card"><p><strong>Nearest Hospital</strong></p><span id="hospitalName">Loading...</span></div>
-            <div class="card"><p><strong>Total Distance</strong></p><span id="distance">Loading...</span></div>
-            <div class="card"><p><strong>Estimated Time</strong></p><span id="eta">Loading...</span></div>
-            <div class="card"><p><strong>Algorithm</strong></p><span>Dijkstra + traffic weights</span></div>
-            <div class="card"><p><strong>Traffic Status</strong></p><span id="trafficStatus">Loading...</span></div>
+
+            <div class="card">
+                <p><strong>Emergency Node</strong></p>
+                <span id="emergencyNode">Loading...</span>
+            </div>
+
+            <div class="card">
+                <p><strong>Ambulance ID</strong></p>
+                <span id="ambulanceId">Loading...</span>
+            </div>
+
+            <div class="card">
+                <p><strong>Nearest Hospital</strong></p>
+                <span id="hospitalName">Loading...</span>
+            </div>
+
+            <div class="card">
+                <p><strong>Total Distance</strong></p>
+                <span id="distance">Loading...</span>
+            </div>
+
+            <div class="card">
+                <p><strong>Estimated Time</strong></p>
+                <span id="eta">Loading...</span>
+            </div>
+
+            <div class="card">
+                <p><strong>Algorithm</strong></p>
+                <span>Dijkstra + traffic weights</span>
+            </div>
+
+            <div class="card">
+                <p><strong>Traffic Status</strong></p>
+                <span id="trafficStatus">Loading...</span>
+            </div>
+
             <div class="card">
                 <h3>Select Emergency</h3>
+
                 <label for="latitude">Latitude</label>
-                <input id="latitude" placeholder="Click the map" readonly>
+                <input
+                    id="latitude"
+                    type="text"
+                    placeholder="Click the map"
+                    readonly
+                >
+
                 <label for="longitude">Longitude</label>
-                <input id="longitude" placeholder="Click the map" readonly>
-                <button id="generateRouteBtn">Generate Route</button>
-                <p id="status" role="status">Loading route...</p>
+                <input
+                    id="longitude"
+                    type="text"
+                    placeholder="Click the map"
+                    readonly
+                >
+
+                <button id="generateRouteBtn" type="button">
+                    Generate Route
+                </button>
+
+                <p id="status" role="status" aria-live="polite">
+                    Loading route...
+                </p>
             </div>
         </aside>
+
         <section class="map-section">
             <div id="map"></div>
+
             <div class="legend">
                 <h3>Legend</h3>
-                <div class="legend-item"><span class="green-box"></span>Ambulance to patient</div>
-                <div class="legend-item"><span class="blue-box"></span>Patient to hospital</div>
-                <div class="legend-item">Ambulance / Emergency / Hospital</div>
+
+                <div class="legend-item">
+                    <span class="green-box"></span>
+                    Ambulance to patient
+                </div>
+
+                <div class="legend-item">
+                    <span class="blue-box"></span>
+                    Patient to hospital
+                </div>
+
+                <div class="legend-item">
+                    Ambulance / Emergency / Hospital
+                </div>
             </div>
         </section>
     </div>
-    <footer>Developed using C++, Dijkstra, Leaflet &amp; OpenStreetMap</footer>
+
+    <footer>
+        Developed using C++, Dijkstra, Leaflet &amp; OpenStreetMap
+    </footer>
+
+    <!-- Load scripts in dependency order -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="config.js"></script>
     <script src="map.js"></script>
