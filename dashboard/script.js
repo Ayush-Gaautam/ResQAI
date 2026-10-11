@@ -177,11 +177,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("map").scrollIntoView({ behavior: "smooth", block: "center" });
     });
 
-    try {
-        await loadOperationsSummary();
-    } catch (error) {
-        console.error("ResQAI operations summary error:", error);
-        setText("status", "Route ready. Operations summary is temporarily unavailable.");
-    }
-    await generateRoute();
+    await Promise.all([
+        loadOperationsSummary().catch((error) => {
+            console.error("ResQAI operations summary error:", error);
+        }),
+        generateRoute()
+    ]);
 });
