@@ -49,6 +49,25 @@
                     <article class="panel chart-panel" id="reports"><div class="panel-heading"><div><h2>Request volume</h2><p>Requests received over the last 7 days</p></div><button class="select-button">This week⌄</button></div><div class="chart"><div class="y-axis"><span>40</span><span>30</span><span>20</span><span>10</span><span>0</span></div><div class="chart-area"><div class="grid-lines"><i></i><i></i><i></i><i></i><i></i></div><svg viewBox="0 0 700 150" preserveAspectRatio="none" aria-label="Request volume trend"><defs><linearGradient id="areaFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2f80ed" stop-opacity=".22"/><stop offset="1" stop-color="#2f80ed" stop-opacity="0"/></linearGradient></defs><path class="area" d="M0 108 C35 100,50 110,78 93 S120 80,150 88 S190 58,220 72 S260 90,290 57 S330 65,360 48 S400 76,430 58 S470 47,500 58 S540 20,575 42 S620 35,650 22 S680 30,700 12 L700 150 L0 150Z"/><path class="line" d="M0 108 C35 100,50 110,78 93 S120 80,150 88 S190 58,220 72 S260 90,290 57 S330 65,360 48 S400 76,430 58 S470 47,500 58 S540 20,575 42 S620 35,650 22 S680 30,700 12"/></svg><div class="x-axis"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div></div></div></article>
                     <article class="panel traffic-panel" id="requests"><div class="panel-heading"><div><h2>Operations overview</h2><p>Network performance at a glance</p></div><span class="date-label">Oct 11, 2026</span></div><div class="metric-row"><div class="metric-icon purple">◈</div><div><span>Average response time</span><small>Target: under 15 min</small></div><strong>12.4 <em>min</em></strong></div><div class="progress-track"><i style="width:82%"></i></div><div class="metric-row"><div class="metric-icon teal">◉</div><div><span>Fleet availability</span><small><b id="fleetCount">—</b> ambulances ready</small></div><strong>78<em>%</em></strong></div><div class="progress-track teal-track"><i style="width:78%"></i></div><div class="metric-row no-border"><div class="metric-icon yellow">⚡</div><div><span>Traffic conditions</span><small>Across active routes</small></div><strong class="traffic-value" id="trafficSummary">—</strong></div></article>
                 </section>
+                <section class="operations-grid" aria-label="Operations resources">
+                    <article class="panel resource-card">
+                        <div class="panel-heading"><div><h2>Hospital capacity</h2><p>Current network availability</p></div><span class="resource-icon blue-icon">＋</span></div>
+                        <div class="resource-value"><strong id="hospitalCapacity">—</strong><span>of beds available</span></div>
+                        <div class="capacity-bar"><i id="capacityBar"></i></div>
+                        <div class="resource-meta"><span><b id="hospitalCount">—</b> hospitals operational</span><span class="healthy-label">Healthy</span></div>
+                    </article>
+                    <article class="panel resource-card">
+                        <div class="panel-heading"><div><h2>Vehicle status</h2><p>Fleet readiness</p></div><span class="resource-icon green-icon">⌁</span></div>
+                        <div class="vehicle-stats"><div><strong id="availableVehicles">—</strong><span>Available</span></div><div><strong id="busyVehicles">—</strong><span>On dispatch</span></div><div><strong id="totalVehicles">—</strong><span>Total fleet</span></div></div>
+                        <div class="resource-meta"><span>Live fleet monitoring</span><span class="healthy-label">Operational</span></div>
+                    </article>
+                    <article class="panel resource-card">
+                        <div class="panel-heading"><div><h2>Route optimization</h2><p>Dispatch intelligence</p></div><span class="resource-icon purple-icon">⌁</span></div>
+                        <div class="optimization-value"><strong id="optimizationSaving">—</strong><span>faster routes</span></div>
+                        <div class="optimization-copy"><span class="algorithm-badge" id="optimizationAlgorithm">Loading</span><span>Traffic-aware routing enabled</span></div>
+                        <div class="resource-meta"><span>Last recalculated just now</span><span class="healthy-label">Optimized</span></div>
+                    </article>
+                </section>
                 <p class="footer-note">Powered by ResQAI routing engine · Dijkstra with live traffic weights</p>
             </div>
         </main>

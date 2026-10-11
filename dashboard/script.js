@@ -5,6 +5,24 @@ const apiBaseUrl = (
 
 let selectedLocation = null;
 
+async function loadOperationsSummary() {
+    const response = await fetch(`${apiBaseUrl}/operations`);
+    if (!response.ok) {
+        throw new Error(`Operations summary failed (HTTP ${response.status}).`);
+    }
+    const summary = await response.json();
+    const capacity = summary.hospitals.capacity_percent;
+    setText("hospitalCapacity", `${capacity}%`);
+    setText("hospitalCount", summary.hospitals.operational);
+    setText("availableVehicles", summary.fleet.available);
+    setText("busyVehicles", summary.fleet.busy);
+    setText("totalVehicles", summary.fleet.total);
+    setText("optimizationSaving", `${summary.optimization.average_saving_percent}%`);
+    setText("optimizationAlgorithm", summary.optimization.algorithm);
+    const capacityBar = document.getElementById("capacityBar");
+    if (capacityBar) capacityBar.style.width = `${capacity}%`;
+}
+
 function setText(id, value) {
     const element = document.getElementById(id);
     if (element) {
@@ -159,5 +177,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("map").scrollIntoView({ behavior: "smooth", block: "center" });
     });
 
+    try {
+        await loadOperationsSummary();
+    } catch (error) {
+        console.error("ResQAI operations summary error:", error);
+        setText("status", "Route ready. Operations summary is temporarily unavailable.");
+    }
     await generateRoute();
 });
