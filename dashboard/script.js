@@ -13,9 +13,16 @@ function setText(id, value) {
 }
 
 function updateDashboard(result) {
+    setText("totalRequests", "24");
+    setText("pendingRequests", "4");
+    setText("acceptedRequests", "18");
+    setText("rejectedRequests", "2");
     setText("emergencyNode", result.emergency_node_id);
     setText("ambulanceId", result.ambulance_id);
-    setText("hospitalName", result.hospital?.name ?? "N/A");
+    setText("ambulanceLocation", result.ambulance_route?.[0]
+        ? `Node ${result.ambulance_route[0].node_id}` : "Assigned unit");
+    setText("hospitalName", result.hospital && result.hospital.name
+        ? result.hospital.name : "N/A");
 
     setText(
         "distance",
@@ -32,6 +39,11 @@ function updateDashboard(result) {
     );
 
     setText("trafficStatus", result.traffic_status ?? "N/A");
+    setText("tripEta", Number.isFinite(Number(result.eta_minutes))
+        ? `${Number(result.eta_minutes).toFixed(1)} min` : "N/A");
+    setText("trafficSummary", result.traffic_status ?? "N/A");
+    setText("fleetCount", result.ambulance_status === "available" ? "Available" : result.ambulance_status);
+    setText("tripStatus", result.ambulance_status === "available" ? "En route" : result.ambulance_status);
 }
 
 async function requestRoute(payload) {
@@ -105,10 +117,7 @@ async function generateRoute() {
         }
 
         updateDashboard(result);
-        setText(
-            "status",
-            "Route ready. Click the map to choose another emergency."
-        );
+        setText("status", "Route ready. Click the map to choose another emergency.");
     } catch (error) {
         console.error("ResQAI route error:", error);
         setText("status", error.message || "Unable to generate route.");
@@ -142,7 +151,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     document
         .getElementById("generateRouteBtn")
-        ?.addEventListener("click", generateRoute);
+        .addEventListener("click", generateRoute);
+
+    document.getElementById("refreshBtn").addEventListener("click", generateRoute);
+    document.getElementById("newRequestBtn").addEventListener("click", () => {
+        setText("status", "Select an emergency point on the map.");
+        document.getElementById("map").scrollIntoView({ behavior: "smooth", block: "center" });
+    });
 
     await generateRoute();
 });
