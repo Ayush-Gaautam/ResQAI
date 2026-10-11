@@ -6,24 +6,18 @@ let emergencyMarker = null;
 let hospitalMarker = null;
 let selectedMarker = null;
 
-const ambulanceIcon = L.icon({
-    iconUrl: "https://cdn-icons-png.flaticon.com/512/2967/2967350.png",
-    iconSize: [38, 38],
-    iconAnchor: [19, 38],
-    popupAnchor: [0, -30]
-});
-const emergencyIcon = L.icon({
-    iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
-    iconSize: [38, 38],
-    iconAnchor: [19, 38],
-    popupAnchor: [0, -30]
-});
-const hospitalIcon = L.icon({
-    iconUrl: "https://cdn-icons-png.flaticon.com/512/2966/2966488.png",
-    iconSize: [38, 38],
-    iconAnchor: [19, 38],
-    popupAnchor: [0, -30]
-});
+function markerIcon(kind, symbol) {
+    return L.divIcon({
+        className: "",
+        html: `<span class="custom-marker ${kind}-marker">${symbol}</span>`,
+        iconSize: [29, 29],
+        iconAnchor: [14, 14]
+    });
+}
+
+const ambulanceIcon = markerIcon("ambulance", "✚");
+const emergencyIcon = markerIcon("emergency", "!");
+const hospitalIcon = markerIcon("hospital", "✚");
 
 function initializeMap(onSelect) {
     map = L.map("map").setView([30.7333, 76.7794], 13);
@@ -46,8 +40,11 @@ function drawRoute(points, color, currentLayer) {
 }
 
 function displayRoute(result) {
-    ambulanceRoute = drawRoute(result.ambulance_route, "green", ambulanceRoute);
-    hospitalRoute = drawRoute(result.hospital_route, "blue", hospitalRoute);
+    if (!result.ambulance_route?.length || !result.hospital_route?.length || !result.hospital) {
+        throw new Error("The API returned an incomplete route.");
+    }
+    ambulanceRoute = drawRoute(result.ambulance_route, "#27b47e", ambulanceRoute);
+    hospitalRoute = drawRoute(result.hospital_route, "#2f80ed", hospitalRoute);
     [ambulanceMarker, emergencyMarker, hospitalMarker].forEach((marker) => {
         if (marker) map.removeLayer(marker);
     });

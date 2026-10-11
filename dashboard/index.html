@@ -1,124 +1,77 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>ResQAI - Emergency Response Dashboard</title>
-
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    >
+    <meta name="theme-color" content="#f4f7fb">
+    <title>ResQAI | Operations dashboard</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <header>
-        <div class="logo">ResQAI</div>
-        <div class="title">Smart Emergency Response System</div>
-    </header>
-
-    <div class="container">
-        <aside class="sidebar">
-            <h2>Emergency Information</h2>
-
-            <div class="card">
-                <p><strong>Emergency Node</strong></p>
-                <span id="emergencyNode">Loading...</span>
-            </div>
-
-            <div class="card">
-                <p><strong>Ambulance ID</strong></p>
-                <span id="ambulanceId">Loading...</span>
-            </div>
-
-            <div class="card">
-                <p><strong>Nearest Hospital</strong></p>
-                <span id="hospitalName">Loading...</span>
-            </div>
-
-            <div class="card">
-                <p><strong>Total Distance</strong></p>
-                <span id="distance">Loading...</span>
-            </div>
-
-            <div class="card">
-                <p><strong>Estimated Time</strong></p>
-                <span id="eta">Loading...</span>
-            </div>
-
-            <div class="card">
-                <p><strong>Algorithm</strong></p>
-                <span>Dijkstra + traffic weights</span>
-            </div>
-
-            <div class="card">
-                <p><strong>Traffic Status</strong></p>
-                <span id="trafficStatus">Loading...</span>
-            </div>
-
-            <div class="card">
-                <h3>Select Emergency</h3>
-
-                <label for="latitude">Latitude</label>
-                <input
-                    id="latitude"
-                    type="text"
-                    placeholder="Click the map"
-                    readonly
-                >
-
-                <label for="longitude">Longitude</label>
-                <input
-                    id="longitude"
-                    type="text"
-                    placeholder="Click the map"
-                    readonly
-                >
-
-                <button id="generateRouteBtn" type="button">
-                    Generate Route
-                </button>
-
-                <p id="status" role="status" aria-live="polite">
-                    Loading route...
-                </p>
+    <div class="app-shell">
+        <aside class="sidebar" aria-label="Primary navigation">
+            <div class="brand"><div class="brand-mark">✦</div><div><strong>ResQAI</strong><span>Response operations</span></div></div>
+            <div class="workspace-switcher"><span class="avatar">OC</span><span><strong>Operations center</strong><small>Chandigarh region</small></span><span class="chevron">⌄</span></div>
+            <nav class="nav-list">
+                <p class="nav-label">Workspace</p>
+                <a class="nav-item active" href="#overview"><span class="nav-icon">▦</span>Overview</a>
+                <a class="nav-item" href="#requests"><span class="nav-icon">◌</span>Requests <b class="nav-badge">4</b></a>
+                <a class="nav-item" href="#dispatch"><span class="nav-icon">➤</span>Dispatch</a>
+                <a class="nav-item" href="#monitoring"><span class="nav-icon">◉</span>Monitoring</a>
+                <p class="nav-label secondary-label">Management</p>
+                <a class="nav-item" href="#payments"><span class="nav-icon">▣</span>Payments</a>
+                <a class="nav-item" href="#invoices"><span class="nav-icon">▤</span>Invoices</a>
+                <a class="nav-item" href="#chat"><span class="nav-icon">☏</span>Chat <b class="nav-badge muted">2</b></a>
+                <a class="nav-item" href="#reports"><span class="nav-icon">⌁</span>Reports &amp; Analytics</a>
+            </nav>
+            <div class="sidebar-bottom">
+                <a class="nav-item" href="#settings"><span class="nav-icon">⚙</span>Settings</a>
+                <div class="help-card"><span class="help-icon">?</span><div><strong>Need help?</strong><small>Contact support center</small></div><span>›</span></div>
+                <div class="profile"><span class="avatar profile-avatar">AS</span><span><strong>Alex Singh</strong><small>Dispatcher</small></span><span class="more">•••</span></div>
             </div>
         </aside>
-
-        <section class="map-section">
-            <div id="map"></div>
-
-            <div class="legend">
-                <h3>Legend</h3>
-
-                <div class="legend-item">
-                    <span class="green-box"></span>
-                    Ambulance to patient
-                </div>
-
-                <div class="legend-item">
-                    <span class="blue-box"></span>
-                    Patient to hospital
-                </div>
-
-                <div class="legend-item">
-                    Ambulance / Emergency / Hospital
-                </div>
+        <main class="main-content">
+            <header class="topbar"><div class="mobile-brand"><span class="brand-mark">✦</span> ResQAI</div><div class="breadcrumb"><span>Workspace</span><b>/</b><strong>Overview</strong></div><div class="topbar-actions"><span class="live-status"><i></i>System operational</span><button class="icon-button" aria-label="Notifications">♧<i class="notification-dot"></i></button><button class="icon-button" aria-label="Help">?</button></div></header>
+            <div class="content">
+                <section class="welcome-row" id="overview"><div><p class="eyebrow">Sunday, October 11, 2026</p><h1>Good morning, Alex <span>✦</span></h1><p class="subtle">Here is what's happening across your response network today.</p></div><div class="header-actions"><button class="secondary-button" id="refreshBtn">↻ <span>Refresh data</span></button><button class="primary-button" id="newRequestBtn">＋ New request</button></div></section>
+                <section class="kpi-grid" aria-label="Request summary">
+                    <article class="kpi-card"><div class="kpi-top"><span>Total requests</span><span class="kpi-icon blue">▦</span></div><strong id="totalRequests">—</strong><p class="trend up">↗ <b>12.5%</b><span>vs last week</span></p></article>
+                    <article class="kpi-card"><div class="kpi-top"><span>Pending requests</span><span class="kpi-icon orange">◷</span></div><strong id="pendingRequests">—</strong><p class="trend warning">● <b>Needs attention</b></p></article>
+                    <article class="kpi-card"><div class="kpi-top"><span>Accepted requests</span><span class="kpi-icon green">✓</span></div><strong id="acceptedRequests">—</strong><p class="trend up">↗ <b>8.2%</b><span>vs last week</span></p></article>
+                    <article class="kpi-card"><div class="kpi-top"><span>Rejected requests</span><span class="kpi-icon red">×</span></div><strong id="rejectedRequests">—</strong><p class="trend down">↘ <b>2.4%</b><span>vs last week</span></p></article>
+                </section>
+                <section class="dashboard-grid">
+                    <article class="panel map-panel" id="monitoring"><div class="panel-heading"><div><h2>Live dispatch map</h2><p>Real-time response network</p></div><span class="live-pill"><i></i>Live</span></div><div class="map-wrap"><div id="map" aria-label="Live emergency response map"></div><div class="map-overlay"><span class="map-filter active">All</span><span class="map-filter">Ambulances</span><span class="map-filter">Hospitals</span></div></div><div class="map-footer"><div class="map-legend"><span><i class="legend-dot ambulance"></i>Ambulance</span><span><i class="legend-dot emergency"></i>Emergency</span><span><i class="legend-dot hospital"></i>Hospital</span><span><i class="legend-line route-green"></i>To emergency</span><span><i class="legend-line route-blue"></i>To hospital</span></div><span class="map-hint">Click map to select an emergency point</span></div></article>
+                    <article class="panel active-trip" id="dispatch"><div class="panel-heading"><div><h2>Active dispatch</h2><p>Current route assignment</p></div><span class="status-chip" id="tripStatus">Loading</span></div><div class="trip-id"><span class="trip-icon">⌁</span><div><strong id="ambulanceId">—</strong><small>Responding to emergency</small></div><span class="trip-menu">•••</span></div><div class="trip-route"><div class="route-step"><span class="route-dot start"></span><div><small>Ambulance location</small><strong id="ambulanceLocation">Waiting for route</strong></div><time>Now</time></div><div class="route-line"></div><div class="route-step"><span class="route-dot incident"></span><div><small>Emergency location</small><strong id="emergencyNode">Waiting for route</strong></div><time>—</time></div><div class="route-line"></div><div class="route-step"><span class="route-dot end"></span><div><small>Nearest hospital</small><strong id="hospitalName">Waiting for route</strong></div><time id="eta">—</time></div></div><div class="trip-stats"><div><small>Total distance</small><strong id="distance">—</strong></div><div><small>Estimated arrival</small><strong id="tripEta">—</strong></div><div><small>Traffic</small><strong id="trafficStatus">—</strong></div></div><div class="route-control"><div><div class="control-label">Choose emergency point</div><div class="coordinate-fields"><label>LAT<input id="latitude" type="text" placeholder="Map click" readonly></label><label>LNG<input id="longitude" type="text" placeholder="Map click" readonly></label></div></div><button class="primary-button route-button" id="generateRouteBtn" type="button">Generate route <span>→</span></button><p id="status" role="status" aria-live="polite">Loading route data…</p></div></article>
+                </section>
+                <section class="lower-grid">
+                    <article class="panel chart-panel" id="reports"><div class="panel-heading"><div><h2>Request volume</h2><p>Requests received over the last 7 days</p></div><button class="select-button">This week⌄</button></div><div class="chart"><div class="y-axis"><span>40</span><span>30</span><span>20</span><span>10</span><span>0</span></div><div class="chart-area"><div class="grid-lines"><i></i><i></i><i></i><i></i><i></i></div><svg viewBox="0 0 700 150" preserveAspectRatio="none" aria-label="Request volume trend"><defs><linearGradient id="areaFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2f80ed" stop-opacity=".22"/><stop offset="1" stop-color="#2f80ed" stop-opacity="0"/></linearGradient></defs><path class="area" d="M0 108 C35 100,50 110,78 93 S120 80,150 88 S190 58,220 72 S260 90,290 57 S330 65,360 48 S400 76,430 58 S470 47,500 58 S540 20,575 42 S620 35,650 22 S680 30,700 12 L700 150 L0 150Z"/><path class="line" d="M0 108 C35 100,50 110,78 93 S120 80,150 88 S190 58,220 72 S260 90,290 57 S330 65,360 48 S400 76,430 58 S470 47,500 58 S540 20,575 42 S620 35,650 22 S680 30,700 12"/></svg><div class="x-axis"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div></div></div></article>
+                    <article class="panel traffic-panel" id="requests"><div class="panel-heading"><div><h2>Operations overview</h2><p>Network performance at a glance</p></div><span class="date-label">Oct 11, 2026</span></div><div class="metric-row"><div class="metric-icon purple">◈</div><div><span>Average response time</span><small>Target: under 15 min</small></div><strong>12.4 <em>min</em></strong></div><div class="progress-track"><i style="width:82%"></i></div><div class="metric-row"><div class="metric-icon teal">◉</div><div><span>Fleet availability</span><small><b id="fleetCount">—</b> ambulances ready</small></div><strong>78<em>%</em></strong></div><div class="progress-track teal-track"><i style="width:78%"></i></div><div class="metric-row no-border"><div class="metric-icon yellow">⚡</div><div><span>Traffic conditions</span><small>Across active routes</small></div><strong class="traffic-value" id="trafficSummary">—</strong></div></article>
+                </section>
+                <section class="operations-grid" aria-label="Operations resources">
+                    <article class="panel resource-card">
+                        <div class="panel-heading"><div><h2>Hospital capacity</h2><p>Current network availability</p></div><span class="resource-icon blue-icon">＋</span></div>
+                        <div class="resource-value"><strong id="hospitalCapacity">—</strong><span>of beds available</span></div>
+                        <div class="capacity-bar"><i id="capacityBar"></i></div>
+                        <div class="resource-meta"><span><b id="hospitalCount">—</b> hospitals operational</span><span class="healthy-label">Healthy</span></div>
+                    </article>
+                    <article class="panel resource-card">
+                        <div class="panel-heading"><div><h2>Vehicle status</h2><p>Fleet readiness</p></div><span class="resource-icon green-icon">⌁</span></div>
+                        <div class="vehicle-stats"><div><strong id="availableVehicles">—</strong><span>Available</span></div><div><strong id="busyVehicles">—</strong><span>On dispatch</span></div><div><strong id="totalVehicles">—</strong><span>Total fleet</span></div></div>
+                        <div class="resource-meta"><span>Live fleet monitoring</span><span class="healthy-label">Operational</span></div>
+                    </article>
+                    <article class="panel resource-card">
+                        <div class="panel-heading"><div><h2>Route optimization</h2><p>Dispatch intelligence</p></div><span class="resource-icon purple-icon">⌁</span></div>
+                        <div class="optimization-value"><strong id="optimizationSaving">—</strong><span>faster routes</span></div>
+                        <div class="optimization-copy"><span class="algorithm-badge" id="optimizationAlgorithm">Loading</span><span>Traffic-aware routing enabled</span></div>
+                        <div class="resource-meta"><span>Last recalculated just now</span><span class="healthy-label">Optimized</span></div>
+                    </article>
+                </section>
+                <p class="footer-note">Powered by ResQAI routing engine · Dijkstra with live traffic weights</p>
             </div>
-        </section>
+        </main>
     </div>
-
-    <footer>
-        Developed using C++, Dijkstra, Leaflet &amp; OpenStreetMap
-    </footer>
-
-    <!-- Load scripts in dependency order -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="config.js"></script>
-    <script src="map.js"></script>
-    <script src="script.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="config.js"></script><script src="map.js"></script><script src="script.js"></script>
 </body>
 </html>
