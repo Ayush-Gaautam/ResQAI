@@ -20,9 +20,9 @@
                 <a class="nav-item" href="#dispatch"><span class="nav-icon">➤</span>Dispatch</a>
                 <a class="nav-item" href="#monitoring"><span class="nav-icon">◉</span>Monitoring</a>
                 <p class="nav-label secondary-label">Management</p>
-                <a class="nav-item" href="#payments"><span class="nav-icon">▣</span>Payments</a>
-                <a class="nav-item" href="#invoices"><span class="nav-icon">▤</span>Invoices</a>
-                <a class="nav-item" href="#chat"><span class="nav-icon">☏</span>Chat <b class="nav-badge muted">2</b></a>
+                <a class="nav-item" id="paymentsNav" href="#payments"><span class="nav-icon">▣</span>Payments</a>
+                <a class="nav-item" id="invoicesNav" href="#invoices"><span class="nav-icon">▤</span>Invoices</a>
+                <a class="nav-item" id="chatNav" href="#chat"><span class="nav-icon">☏</span>Chat <b class="nav-badge muted">2</b></a>
                 <a class="nav-item" href="#reports"><span class="nav-icon">⌁</span>Reports &amp; Analytics</a>
             </nav>
             <div class="sidebar-bottom">
@@ -71,6 +71,33 @@
                 <p class="footer-note">Powered by ResQAI routing engine · Dijkstra with live traffic weights</p>
             </div>
         </main>
+    </div>
+    <div class="modal-backdrop" id="modalBackdrop" hidden>
+        <section class="demo-modal" id="paymentModal" role="dialog" aria-modal="true" aria-labelledby="paymentTitle" hidden>
+            <button class="modal-close" type="button" data-close-modal aria-label="Close payment dialog">×</button>
+            <p class="eyebrow">Demo only · no payment is processed</p>
+            <h2 id="paymentTitle">Payment method</h2>
+            <p class="modal-subtitle">Use the generated QR for a safe presentation flow. Never enter card numbers or banking credentials here.</p>
+            <div class="demo-banner">DEMO PAYMENT FLOW <span>Sample reference only</span></div>
+            <div class="payment-layout">
+                <div><label class="demo-label" for="paymentMethod">Payment method</label><select id="paymentMethod"><option>Demo QR payment</option><option>Invoice reference only</option></select><p class="demo-reference">Reference <strong id="demoPaymentReference">—</strong></p><button class="primary-button" id="generateQrBtn" type="button">Generate new demo QR</button></div>
+                <div class="qr-panel"><img id="paymentQr" alt="Generated demo payment QR code"><div class="qr-fallback" id="qrFallback" hidden>QR preview unavailable.<br>Use the demo reference instead.</div></div>
+            </div>
+        </section>
+        <section class="demo-modal" id="invoiceModal" role="dialog" aria-modal="true" aria-labelledby="invoiceTitle" hidden>
+            <button class="modal-close" type="button" data-close-modal aria-label="Close invoices dialog">×</button>
+            <p class="eyebrow">Demo records · no billing backend connected</p><h2 id="invoiceTitle">Invoices</h2>
+            <p class="modal-subtitle">Sample invoices are generated from the current dispatch route for review and printing.</p>
+            <div class="invoice-list" id="invoiceList"></div>
+            <div class="modal-actions"><button class="secondary-button" data-close-modal type="button">Close</button><button class="primary-button" id="printInvoiceBtn" type="button">Print demo invoice</button></div>
+        </section>
+        <section class="demo-modal chat-modal" id="chatModal" role="dialog" aria-modal="true" aria-labelledby="chatTitle" hidden>
+            <button class="modal-close" type="button" data-close-modal aria-label="Close chat dialog">×</button>
+            <p class="eyebrow">Demo support chat · local replies</p><h2 id="chatTitle">Operations support</h2>
+            <div class="chat-thread" id="chatThread"><div class="chat-message received">Hello! This is the ResQAI demo support desk. How can we help?</div></div>
+            <form class="chat-form" id="chatForm"><input id="chatInput" autocomplete="off" placeholder="Ask about a demo workflow" aria-label="Message"><button class="primary-button" type="submit">Send</button></form>
+            <p class="chat-note">No external chat service or private data is used.</p>
+        </section>
     </div>
     <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script defer src="config.js"></script><script defer src="map.js"></script><script defer src="script.js"></script>
 </body>
